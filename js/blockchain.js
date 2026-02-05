@@ -10,7 +10,7 @@ class Block {
   }
 
   calculateHash() {
-    return btoa(
+    return sha256(
       this.index +
       this.timestamp +
       this.batchId +
@@ -35,7 +35,7 @@ class Blockchain {
   }
 
   addBlock(batchId, actor, data) {
-    const block = new Block(
+    const newBlock = new Block(
       this.chain.length,
       new Date().toISOString(),
       batchId,
@@ -43,7 +43,7 @@ class Blockchain {
       data,
       this.getLatestBlock().hash
     );
-    this.chain.push(block);
+    this.chain.push(newBlock);
   }
 
   isValid() {

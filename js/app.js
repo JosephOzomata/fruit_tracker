@@ -1,6 +1,6 @@
 let blockchain = new Blockchain(loadChain());
 
-function createBatchUI() {
+async function createBatchUI() {
   const batchIdInput = document.getElementById("batchId").value;
   const fruitInput = document.getElementById("fruit").value;
   const originInput = document.getElementById("origin").value;
@@ -10,7 +10,7 @@ function createBatchUI() {
     return;
   }
 
-  blockchain.addBlock(batchIdInput, "Farmer", {
+  await blockchain.addBlock(batchIdInput, "Farmer", {
     fruit: fruitInput,
     origin: originInput
   });
@@ -19,9 +19,8 @@ function createBatchUI() {
   alert("Batch created successfully");
 }
 
-
-function updateBatchUI() {
-  blockchain.addBlock(
+async function updateBatchUI() {
+  await blockchain.addBlock(
     updateBatchId.value,
     role.value,
     { location: location.value, note: note.value }
@@ -50,19 +49,20 @@ function searchBatch() {
     div.innerHTML = `
       <p><strong>Actor:</strong> ${b.actor}</p>
       <p><strong>Data:</strong> ${JSON.stringify(b.data)}</p>
-      <p class="text-sm text-gray-500">${b.timestamp}</p>
+      <p><strong>Hash:</strong> ${b.hash}</p>
+      <p><strong>Previous Hash:</strong> ${b.previousHash}</p>
+      <p class="text-sm text-gray-500">Time Stamp: ${b.timestamp}</p>
     `;
 
     historyDiv.appendChild(div);
   });
 }
 
-
-function verifyChain() {
+async function verifyChain() {
   const verifyResult = document.getElementById("verifyResult");
 
-  verifyResult.textContent = blockchain.isValid()
+  const isValid = await blockchain.isValid();
+  verifyResult.textContent = isValid
     ? "✅ Blockchain is valid and untampered"
     : "❌ Blockchain integrity compromised";
 }
-
